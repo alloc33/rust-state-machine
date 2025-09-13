@@ -20,21 +20,18 @@ impl Pallet {
 
     /// Get the current block number.
     pub fn block_number(&self) -> u32 {
-        /* TODO: Return the current block number. */
         self.block_number
     }
 
     // This function can be used to increment the block number.
     // Increases the block number by one.
     pub fn inc_block_number(&mut self) {
-        /* TODO: Increment the current block number by one. */
         self.block_number += 1;
     }
 
     // Increment the nonce of an account. This helps us keep track of how many transactions each
     // account has made.
     pub fn inc_nonce(&mut self, who: &String) {
-        /* TODO: Get the current nonce of `who`, and increment it by one. */
         self.nonce
             .entry(who.clone())
             .and_modify(|n| *n += 1)
