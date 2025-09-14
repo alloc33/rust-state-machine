@@ -1,11 +1,19 @@
 mod balances;
 mod system;
 
+mod types {
+    pub type AccountId = String;
+    pub type Balance = u128;
+    pub type BlockNumber = u32;
+    pub type Nonce = u32;
+}
+
 // This is our main Runtime.
 // It accumulates all of the different pallets we want to use.
+#[derive(Debug)]
 pub struct Runtime {
-    system: system::Pallet,
-    balances: balances::Pallet,
+    system: system::Pallet<Self>,
+    balances: balances::Pallet<Self>,
 }
 
 impl Runtime {
@@ -18,25 +26,18 @@ impl Runtime {
     }
 }
 
+impl system::Config for Runtime {
+    type AccountId = types::AccountId;
+    type BlockNumber = types::BlockNumber;
+    type Nonce = types::Nonce;
+}
+
+impl balances::Config for Runtime {
+    type AccountId = types::AccountId;
+    type Balance = types::Balance;
+}
+
 fn main() {
-    /* TODO: Create a mutable variable `runtime`, which is a new instance of `Runtime`. */
-    /* TODO: Set the balance of `alice` to 100, allowing us to execute other transactions. */
-
-    // start emulating a block
-    /* TODO: Increment the block number in system. */
-    /* TODO: Assert the block number is what we expect. */
-
-    // first transaction
-    /* TODO: Increment the nonce of `alice`. */
-    /* TODO: Execute a transfer from `alice` to `bob` for 30 tokens.
-        - The transfer _could_ return an error. We should use `map_err` to print
-          the error if there is one.
-        - We should capture the result of the transfer in an unused variable like `_res`.
-    */
-
-    // second transaction
-    /* TODO: Increment the nonce of `alice` again. */
-    /* TODO: Execute another balance transfer, this time from `alice` to `charlie` for 20. */
     let mut runtime = Runtime::new();
     runtime.balances.set_balance(&"alice".to_string(), 100);
 
@@ -54,4 +55,6 @@ fn main() {
         .balances
         .transfer("alice".to_string(), "charlie".to_string(), 20)
         .map_err(|e| println!("{e:?}"));
+
+    println!("{runtime:#?}");
 }
