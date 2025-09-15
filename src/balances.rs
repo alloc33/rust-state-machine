@@ -1,11 +1,17 @@
+use num::traits::{CheckedAdd, CheckedSub, Zero};
 use std::collections::BTreeMap;
 
-use num::{CheckedAdd, CheckedSub, Zero};
-
+/// The configuration trait for the Balances Module.
+/// Contains the basic types needed for handling balances.
 pub trait Config: crate::system::Config {
+	/// A type which can represent the balance of an account.
+	/// Usually this is a large unsigned integer.
 	type Balance: Zero + CheckedSub + CheckedAdd + Copy;
 }
 
+/// This is the Balances Module.
+/// It is a simple module which keeps track of how much balance each account has in this state
+/// machine.
 #[derive(Debug)]
 pub struct Pallet<T: Config> {
 	// A simple storage mapping from accounts to their balances.
@@ -13,7 +19,7 @@ pub struct Pallet<T: Config> {
 }
 
 impl<T: Config> Pallet<T> {
-	/// Create a new instance of the balances module.
+	// Create a new instance of the balances module.
 	pub fn new() -> Self {
 		Self { balances: BTreeMap::new() }
 	}
@@ -51,9 +57,37 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
+// A public enum which describes the calls we want to expose to the dispatcher.
+// We should expect that the caller of each call will be provided by the dispatcher,
+// and not included as a parameter of the call.
+pub enum Call<T: Config> {
+	Transfer { to: T::AccountId, amount: T::Balance },
+}
+
+/// Implementation of the dispatch logic, mapping from `BalancesCall` to the appropriate underlying
+/// function we want to execute.
+impl<T: Config> crate::support::Dispatch for Pallet<T> {
+	type Caller = T::AccountId;
+	type Call = Call<T>;
+
+	fn dispatch(
+		&mut self,
+		caller: Self::Caller,
+		call: Self::Call,
+	) -> crate::support::DispatchResult {
+		match call {
+			Call::Transfer { to, amount } => {
+				self.transfer(caller, to, amount)?;
+			},
+		}
+		Ok(())
+	}
+}
+
 #[cfg(test)]
 mod tests {
 	struct TestConfig;
+
 	impl crate::system::Config for TestConfig {
 		type AccountId = String;
 		type BlockNumber = u32;
@@ -61,7 +95,7 @@ mod tests {
 	}
 
 	impl super::Config for TestConfig {
-		type Balance = u32;
+		type Balance = u128;
 	}
 
 	#[test]

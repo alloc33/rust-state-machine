@@ -1,0 +1,83 @@
+digraph {
+
+    graph [
+        label="rust_state_machine",
+        labelloc=t,
+
+        pad=0.4,
+
+        // Consider rendering the graph using a different layout algorithm, such as:
+        // [dot, neato, twopi, circo, fdp, sfdp]
+        layout=neato,
+        overlap=false,
+        splines="line",
+        rankdir=LR,
+
+        fontname="Helvetica", 
+        fontsize="36",
+    ];
+
+    node [
+        fontname="monospace",
+        fontsize="10",
+        shape="record",
+        style="filled",
+    ];
+
+    edge [
+        fontname="monospace",
+        fontsize="10",
+    ];
+
+    "rust_state_machine" [label="crate|rust_state_machine", fillcolor="#5397c8"]; // "crate" node
+    "rust_state_machine::Runtime" [label="pub struct|Runtime", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::Runtime::AccountId" [label="pub(crate) type|Runtime::AccountId", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::Runtime::Balance" [label="pub(crate) type|Runtime::Balance", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::Runtime::BlockNumber" [label="pub(crate) type|Runtime::BlockNumber", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::Runtime::Call" [label="pub(crate) type|Runtime::Call", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::Runtime::Caller" [label="pub(crate) type|Runtime::Caller", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::Runtime::Nonce" [label="pub(crate) type|Runtime::Nonce", fillcolor="#f8c04c"]; // "type" node
+    "rust_state_machine::RuntimeCall" [label="pub enum|RuntimeCall", fillcolor="#81c169"]; // "enum" node
+    "rust_state_machine::balances::Config" [label="pub trait|balances::Config", fillcolor="#81c169"]; // "trait" node
+    "rust_state_machine::balances::Pallet" [label="pub struct|balances::Pallet", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::support::Block" [label="pub struct|support::Block", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::support::Dispatch" [label="pub trait|support::Dispatch", fillcolor="#81c169"]; // "trait" node
+    "rust_state_machine::support::DispatchResult" [label="pub type|support::DispatchResult", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::support::Extrinsic" [label="pub struct|support::Extrinsic", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::support::Header" [label="pub struct|support::Header", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::system::Config" [label="pub trait|system::Config", fillcolor="#81c169"]; // "trait" node
+    "rust_state_machine::system::Pallet" [label="pub struct|system::Pallet", fillcolor="#81c169"]; // "struct" node
+    "rust_state_machine::types::AccountId" [label="pub type|types::AccountId", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::Balance" [label="pub type|types::Balance", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::Block" [label="pub type|types::Block", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::BlockNumber" [label="pub type|types::BlockNumber", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::Extrinsic" [label="pub type|types::Extrinsic", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::Header" [label="pub type|types::Header", fillcolor="#81c169"]; // "type" node
+    "rust_state_machine::types::Nonce" [label="pub type|types::Nonce", fillcolor="#81c169"]; // "type" node
+
+    "rust_state_machine" -> "rust_state_machine::Runtime" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::RuntimeCall" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::balances::Config" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::balances::Pallet" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::support::Block" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::support::Dispatch" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::support::DispatchResult" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::support::Extrinsic" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::support::Header" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::system::Config" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::system::Pallet" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::AccountId" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::Balance" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::Block" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::BlockNumber" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::Extrinsic" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::Header" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine" -> "rust_state_machine::types::Nonce" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::AccountId" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::Balance" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::BlockNumber" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::Call" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::Caller" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+    "rust_state_machine::Runtime" -> "rust_state_machine::Runtime::Nonce" [label="owns", color="#000000", style="solid"] [constraint=true]; // "owns" edge
+
+}
