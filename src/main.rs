@@ -20,7 +20,7 @@ mod types {
 // These are all the calls which are exposed to the world.
 // Note that it is just an accumulation of the calls exposed by each module.
 pub enum RuntimeCall {
-	BalancesTranser { to: types::AccountId, amount: types::Balance }
+	BalancesTransfer { to: types::AccountId, amount: types::Balance },
 }
 
 // This is our main Runtime.
@@ -51,8 +51,10 @@ impl Runtime {
 	fn execute_block(&mut self, block: types::Block) -> support::DispatchResult {
 		self.system.inc_block_number();
 		if block.header.block_number != self.system.block_number() {
-			return Err("Invalid block number");
+			return Err("block number does not match what is expected");
 		}
+		// An extrinsic error is not enough to trigger the block to be invalid. We capture the
+		// result, and emit an error message if one is emitted.
 		for (i, support::Extrinsic { caller, call }) in block.extrinsics.into_iter().enumerate() {
 			self.system.inc_nonce(&caller);
 			let _res = self.dispatch(caller, call).map_err(|e| {
@@ -62,7 +64,6 @@ impl Runtime {
 				)
 			});
 		}
-
 		Ok(())
 	}
 }
@@ -80,35 +81,44 @@ impl crate::support::Dispatch for Runtime {
 		caller: Self::Caller,
 		runtime_call: Self::Call,
 	) -> support::DispatchResult {
+		// This match statement will allow us to correctly route `RuntimeCall`s
+		// to the appropriate pallet level function.
 		match runtime_call {
-			RuntimeCall::BalancesTranser { to, amount } => {
+			RuntimeCall::BalancesTransfer { to, amount } => {
 				self.balances.transfer(caller, to, amount)?;
-			}
+			},
 		}
-
 		Ok(())
 	}
 }
 
 fn main() {
+	// Create a new instance of the Runtime.
+	// It will instantiate with it all the modules it uses.
 	let mut runtime = Runtime::new();
 	let alice = "alice".to_string();
 	let bob = "bob".to_string();
 	let charlie = "charlie".to_string();
 
+	// Initialize the system with some initial balance.
 	runtime.balances.set_balance(&alice, 100);
 
-	// start emulating a block
-	runtime.system.inc_block_number();
-	assert_eq!(runtime.system.block_number(), 1);
+	let block_1 = types::Block {
+		header: support::Header { block_number: 1 },
+		extrinsics: vec![
+			support::Extrinsic {
+				caller: alice.clone(),
+				call: RuntimeCall::BalancesTransfer { to: bob, amount: 30 },
+			},
+			support::Extrinsic {
+				caller: alice,
+				call: RuntimeCall::BalancesTransfer { to: charlie, amount: 20 },
+			},
+		],
+	};
 
-	// first transaction
-	runtime.system.inc_nonce(&alice);
-	let _res = runtime.balances.transfer(alice.clone(), bob, 30).map_err(|e| eprintln!("{e}"));
+	runtime.execute_block(block_1).expect("invalid block");
 
-	// second transaction
-	runtime.system.inc_nonce(&alice);
-	let _res = runtime.balances.transfer(alice, charlie, 20).map_err(|e| eprintln!("{e}"));
-
+	// Simply print the debug format of our runtime state.
 	println!("{runtime:#?}");
 }
