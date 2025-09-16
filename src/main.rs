@@ -1,4 +1,5 @@
 mod balances;
+mod proof_of_existence;
 mod support;
 mod system;
 
@@ -108,7 +109,6 @@ fn main() {
 	let block_1 = types::Block {
 		header: support::Header { block_number: 1 },
 		extrinsics: vec![
-			/* TODO: Update your extrinsics to use the nested enum. */
 			support::Extrinsic {
 				caller: alice.clone(),
 				call: RuntimeCall::Balances(balances::Call::Transfer { to: bob, amount: 30 }),
