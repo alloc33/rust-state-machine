@@ -21,5 +21,6 @@ pub fn call(
 
 	// Add our generated code to the end, and return the final result.
 	finished.extend(generated);
-	return finished;
+
+	finished
 }
